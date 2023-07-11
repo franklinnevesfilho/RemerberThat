@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Remember That?</string>
+    <string name="button1">button1</string>
+    <string name="button2">button2</string>
+    <string name="button3">button3</string>
+    <string name="button4">button4</string>
+    <string name="button5">button5</string>
+    <string name="button6">button6</string>
+    <string name="button7">button7</string>
+    <string name="button8">button8</string>
+    <string name="button9">button9</string>
+    <string name="button10">button10</string>
+    <string name="button11">button1</string>
+    <string name="button12">button12</string>
+    <string name="playBtn">playBtn</string>
+</resources>
