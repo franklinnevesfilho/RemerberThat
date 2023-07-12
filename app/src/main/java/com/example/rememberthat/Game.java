@@ -20,7 +20,6 @@ public class Game extends AppCompatActivity {
     private Button startButton;
     private final List<Icon> buttonList = new ArrayList<>();
     private final List<Integer> imageList = new ArrayList<>();
-    private final LinkedList<Icon> buttonsFlipped = new LinkedList<>();
     private Icon previouslySelected;
 
     @Override
@@ -35,15 +34,12 @@ public class Game extends AppCompatActivity {
     }
 
     void startButton(){
-        for(Icon button: buttonList) button.initialState();
-        buttonsFlipped.clear();
         startButton.setClickable(false);
         startButton.setVisibility(View.GONE);
         setUpMatches();
     }
 
     void setUpMatches(){
-
         Collections.shuffle(imageList);
         LinkedList<Integer> imagePattern = new LinkedList<>();
         for(int i = 0; i < buttonList.size()/2; i++) imagePattern.add(i);
@@ -96,33 +92,44 @@ public class Game extends AppCompatActivity {
 
     public void buttonClick(Icon icon){
         icon.flip();
-
         Handler handler = new Handler();
         handler.postDelayed(()->{
-            if(!buttonsFlipped.contains(icon)) buttonsFlipped.add(icon);
-            if(buttonsFlipped.size() == buttonList.size()) restartGame();
-            if (buttonsFlipped.size() % 2 == 0 && previouslySelected != null){
-                if(!buttonsMatch()){
+            if (previouslySelected != null){
+                if(!buttonsMatch(icon)){
                     previouslySelected.flip();
-                    buttonsFlipped.getLast().flip();
+                    icon.flip();
                 }
             }
-            else previouslySelected = icon;
-        },750);
+            if(matchesFound()) restartGame();
+            if(previouslySelected == null) previouslySelected = icon;
+            else previouslySelected = null;
+        },800);
     }
-    public boolean buttonsMatch(){
+    public boolean buttonsMatch(Icon icon){
         boolean match = false;
-        if(buttonsFlipped.getLast().isButtonFlipped() && previouslySelected.isButtonFlipped()){
-            match = buttonsFlipped.getLast().getFront() == previouslySelected.getFront();
+        if(icon.isButtonFlipped() && previouslySelected.isButtonFlipped()){
+            match = icon.getFront() == previouslySelected.getFront();
         }
         return match;
     }
 
+    public boolean matchesFound(){
+        boolean result = true;
+        for(Icon icon: buttonList){
+            if(!icon.isButtonFlipped()){
+                result = false;
+                break;
+            }
+        }
+        return result;
+    }
 
+    @SuppressLint("SetTextI18n")
     public void restartGame(){
         startButton.setText("Restart");
         startButton.setVisibility(View.VISIBLE);
         startButton.setClickable(true);
+        for(Icon button: buttonList) button.initialState();
     }
     private void setActionBar(){
         ActionBar actionBar = getSupportActionBar();
