@@ -5,7 +5,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.Looper;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -19,7 +18,7 @@ public class Game extends AppCompatActivity {
     private Button startButton;
     private final List<Icon> buttonList = new ArrayList<>();
     private final List<Integer> imageList = new ArrayList<>();
-    private LinkedList<Icon> buttonsFlipped = new LinkedList<>();
+    private final LinkedList<Icon> buttonsFlipped = new LinkedList<>();
     private Icon previouslySelected;
 
     @Override
@@ -77,27 +76,24 @@ public class Game extends AppCompatActivity {
         };
 
         for (ImageView button: buttons) buttonList.add(new Icon(button));
-        for(Icon icon: buttonList) icon.getIcon().setOnClickListener(oc ->{
-            if(previouslySelected == null){
-                previouslySelected = icon;
-            }
-            buttonClick(icon);
-        });
+        for(Icon icon: buttonList) icon.getIcon().setOnClickListener(oc -> buttonClick(icon));
     }
 
     public void buttonClick(Icon icon){
         icon.flip();
-        buttonsFlipped.add(icon);
-        if(buttonsFlipped.size() == buttonList.size()) restartGame();
-        else if (buttonsFlipped.size() % 2 == 0 && previouslySelected != null){
-            if(!buttonsMatch()){
-                previouslySelected.flip();
-                icon.flip();
-            }else{
-                // play sound
+
+        Handler handler = new Handler();
+        handler.postDelayed(()->{
+            buttonsFlipped.add(icon);
+            if(buttonsFlipped.size() == buttonList.size()) restartGame();
+            if (buttonsFlipped.size() % 2 == 0 && previouslySelected != null){
+                if(!buttonsMatch()){
+                    previouslySelected.flip();
+                    buttonsFlipped.getLast().flip();
+                }
             }
-            previouslySelected = null;
-        }
+            else previouslySelected = icon;
+        },750);
     }
     public boolean buttonsMatch(){
         boolean match = false;
