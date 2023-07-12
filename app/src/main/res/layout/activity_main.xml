@@ -8,9 +8,9 @@
 
     <Button
         android:id="@+id/playBtn"
-        android:contentDescription="@string/playBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:contentDescription="@string/playBtn"
         android:text="Play"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

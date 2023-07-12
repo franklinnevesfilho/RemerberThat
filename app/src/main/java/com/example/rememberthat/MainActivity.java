@@ -10,32 +10,31 @@ import android.widget.Button;
 
 
 public class MainActivity extends AppCompatActivity {
-
-    @Override
+      @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        setActionBar();
+        this.setActionBar();
 
-        playButton();
+          Button playButton = findViewById(R.id.playBtn);
+
+          playButton.setOnClickListener(oc -> openGameScreen());
     }
 
 
-    void setActionBar(){
+    public void setActionBar(){
         ActionBar actionBar = getSupportActionBar();
+        assert actionBar != null;
         actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_CUSTOM);
         actionBar.setCustomView(R.layout.action_bar_layout);
 
 
     }
-  void playButton(){
-      Button playButton = findViewById(R.id.playBtn);
+    public void openGameScreen(){
+          Intent intent = new Intent(MainActivity.this,Game.class);
+          startActivity(intent);
+    }
 
-      playButton.setOnClickListener(v -> {
-          Intent gameScreen = new Intent(MainActivity.this, GameScreen.class);
-            startActivity(gameScreen);
-      });
-  }
 
 
 }

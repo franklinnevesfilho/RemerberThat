@@ -13,4 +13,5 @@
     <string name="button11">button1</string>
     <string name="button12">button12</string>
     <string name="playBtn">playBtn</string>
+    <string name="start">START</string>
 </resources>
