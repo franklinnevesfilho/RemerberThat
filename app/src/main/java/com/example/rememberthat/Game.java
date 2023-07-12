@@ -3,8 +3,10 @@ package com.example.rememberthat;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.os.Handler;
+import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 
@@ -33,12 +35,14 @@ public class Game extends AppCompatActivity {
     }
 
     void startButton(){
+        for(Icon button: buttonList) button.initialState();
         buttonsFlipped.clear();
         startButton.setClickable(false);
-        generateRandomLists();
+        startButton.setVisibility(View.GONE);
+        setUpMatches();
     }
 
-    void generateRandomLists(){
+    void setUpMatches(){
 
         Collections.shuffle(imageList);
         LinkedList<Integer> imagePattern = new LinkedList<>();
@@ -54,6 +58,14 @@ public class Game extends AppCompatActivity {
                 j++;
                 buttonList.get(buttonPattern.get(j)).setFront(image);
         }
+        for(Icon icon: buttonList) icon.flip();
+        Handler handler = new Handler();
+        handler.postDelayed(()->{
+            for(Icon icon: buttonList) {
+                icon.flip();
+                icon.clickable(true);
+            }
+        },1000);
     }
     private void setUpResources() {
 
@@ -76,7 +88,10 @@ public class Game extends AppCompatActivity {
         };
 
         for (ImageView button: buttons) buttonList.add(new Icon(button));
-        for(Icon icon: buttonList) icon.getIcon().setOnClickListener(oc -> buttonClick(icon));
+        for(Icon icon: buttonList) {
+            icon.getIcon().setOnClickListener(oc -> buttonClick(icon));
+            icon.clickable(false);
+        }
     }
 
     public void buttonClick(Icon icon){
@@ -84,7 +99,7 @@ public class Game extends AppCompatActivity {
 
         Handler handler = new Handler();
         handler.postDelayed(()->{
-            buttonsFlipped.add(icon);
+            if(!buttonsFlipped.contains(icon)) buttonsFlipped.add(icon);
             if(buttonsFlipped.size() == buttonList.size()) restartGame();
             if (buttonsFlipped.size() % 2 == 0 && previouslySelected != null){
                 if(!buttonsMatch()){
@@ -103,8 +118,11 @@ public class Game extends AppCompatActivity {
         return match;
     }
 
-    public void restartGame(){
 
+    public void restartGame(){
+        startButton.setText("Restart");
+        startButton.setVisibility(View.VISIBLE);
+        startButton.setClickable(true);
     }
     private void setActionBar(){
         ActionBar actionBar = getSupportActionBar();

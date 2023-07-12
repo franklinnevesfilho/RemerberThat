@@ -3,7 +3,6 @@ package com.example.rememberthat;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
 import android.animation.ObjectAnimator;
-import android.view.View;
 import android.view.animation.AccelerateDecelerateInterpolator;
 import android.view.animation.DecelerateInterpolator;
 import android.widget.ImageView;
@@ -17,15 +16,13 @@ public class Icon {
 
     public Icon(ImageView icon) {
         this.icon = icon;
-        initialSetup();
+        initialState();
     }
 
-    private void initialSetup(){
-        icon.setClickable(true);
+    public void initialState() {
         icon.setImageResource(back);
         side = ButtonSide.BACK;
     }
-
     public ImageView getIcon() {
         return icon;
     }
@@ -48,6 +45,9 @@ public class Icon {
 
         }
         startAnimation(newImage);
+    }
+    public void clickable(boolean clickState){
+        icon.setClickable(clickState);
     }
     public boolean isButtonFlipped() {
         return side == ButtonSide.FRONT;
